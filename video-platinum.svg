@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#facc15" />
+      <stop offset="1" stop-color="#f97316" />
+    </linearGradient>
+    <linearGradient id="shine" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.4" />
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" rx="80" fill="url(#bg)" />
+  <path d="M240 180h720c44.2 0 80 35.8 80 80v280c0 44.2-35.8 80-80 80H240c-44.2 0-80-35.8-80-80V260c0-44.2 35.8-80 80-80z" fill="#1f2937" opacity="0.95" />
+  <path d="M350 270l300 160-300 160V270z" fill="#facc15" />
+  <rect x="320" y="220" width="560" height="400" rx="36" fill="none" stroke="#fff" stroke-width="10" opacity="0.65" />
+  <path d="M300 240h600v400H300z" fill="url(#shine)" opacity="0.35" />
+  <text x="50%" y="720" fill="#ffffff" font-family="sans-serif" font-size="64" font-weight="800" text-anchor="middle">VIDIO PLATINUM</text>
+</svg>

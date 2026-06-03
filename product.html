@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Detail Produk - AlanaStore</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body
+    class="bg-slate-950 text-slate-100 min-h-screen selection:bg-cyan-500 selection:text-slate-950"
+  >
+    <main class="max-w-4xl mx-auto px-4 py-8">
+      <a href="index.html" class="inline-block text-cyan-400 mb-6"
+        >&larr; Kembali ke Katalog</a
+      >
+      <div id="product-container" class="glass-card rounded-3xl p-6"></div>
+    </main>
+
+    <script src="products.js"></script>
+    <script>
+      const ADMIN_WA_NUMBER = "6282114434878";
+
+      function getQueryParam(name) {
+        const params = new URLSearchParams(window.location.search);
+        return params.get(name);
+      }
+
+      function formatRupiah(number) {
+        return new Intl.NumberFormat("id-ID", {
+          style: "currency",
+          currency: "IDR",
+          minimumFractionDigits: 0,
+        }).format(number);
+      }
+
+      function renderProduct() {
+        const id = parseInt(getQueryParam("id"), 10);
+        const product = window.PRODUCTS.find((p) => p.id === id);
+        const container = document.getElementById("product-container");
+
+        if (!product) {
+          container.innerHTML = `
+            <div class="text-center py-12">
+              <h2 class="text-xl font-extrabold">Produk tidak ditemukan</h2>
+              <p class="text-sm text-slate-400 mt-2">Pastikan tautan benar atau kembali ke katalog.</p>
+            </div>
+          `;
+          return;
+        }
+
+        const variantsOptions = product.variants
+          .map(
+            (v, idx) =>
+              `<option value="${idx}">${v.name} - ${formatRupiah(v.price)}</option>`,
+          )
+          .join("");
+
+        container.innerHTML = `
+          <div class="flex flex-col md:flex-row gap-6">
+            <div class="flex-1">
+              ${
+                product.image
+                  ? `
+                <div class="rounded-3xl overflow-hidden mb-6">
+                  <img src="${product.image}" alt="${product.name}" class="w-full h-72 object-cover" />
+                </div>
+              `
+                  : `
+                <div class="bg-gradient-to-br ${product.color} p-6 rounded-2xl text-white flex items-center justify-center">
+                  <i class="${product.icon} text-4xl"></i>
+                </div>
+              `
+              }
+            </div>
+            <div class="flex-1">
+              <h1 class="text-2xl font-extrabold uppercase">${product.name}</h1>
+              <p class="text-xs text-cyan-400 font-bold mt-1">${product.tagline}</p>
+              <p class="text-slate-300 mt-3">${product.desc}</p>
+
+              <div class="mt-6">
+                <label class="block text-xs text-slate-500 font-bold uppercase mb-2">Pilih Varian</label>
+                <select id="variant-select" class="w-full bg-slate-950 border border-slate-800 text-slate-100 text-sm rounded-xl p-3 outline-none">
+                  ${variantsOptions}
+                </select>
+
+                <div class="mt-4 flex items-center justify-between">
+                  <span class="text-slate-400 text-xs font-extrabold uppercase">Harga</span>
+                  <span id="price-display" class="text-white font-black">${formatRupiah(product.variants[0].price)}</span>
+                </div>
+
+                <div class="mt-6 flex gap-3">
+                  <button id="buy-now" class="flex-1 bg-cyan-500 hover:bg-cyan-400 text-slate-950 p-3 rounded-xl font-black">Beli Sekarang (WA)</button>
+                  <a href="index.html" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-3 rounded-xl text-sm font-bold">Kembali</a>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        `;
+
+        const select = document.getElementById("variant-select");
+        const priceDisplay = document.getElementById("price-display");
+        const buyBtn = document.getElementById("buy-now");
+
+        select.addEventListener("change", () => {
+          const v = product.variants[select.value];
+          priceDisplay.innerText = formatRupiah(v.price);
+        });
+
+        buyBtn.addEventListener("click", () => {
+          const v = product.variants[select.value];
+          const orderText = `*⚡ ORDER - ALANASTORE ⚡*\n\n• Produk: ${product.name}\n• Varian: ${v.name}\n• Harga: ${formatRupiah(v.price)}\n\nSilakan konfirmasi pembayaran. Terima kasih.`;
+          const waUrl = `https://api.whatsapp.com/send?phone=${ADMIN_WA_NUMBER}&text=${encodeURIComponent(orderText)}`;
+          window.open(waUrl, "_blank");
+        });
+      }
+
+      document.addEventListener("DOMContentLoaded", renderProduct);
+    </script>
+  </body>
+</html>
